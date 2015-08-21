@@ -32,23 +32,29 @@ function setup() {
 } // END setup
 		
 function playvid(value) {
-	// alert(value);
 	var video = document.getElementById(value);
 	if(video.paused){
 		video.play(); 
-		video.webkitRequestFullScreen();
 		$('#overlay').addClass('hideMe');
-		
-	} else {
+                $("#"+value).attr('height','240');
+                $("#"+value).attr('width','320');
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                  } else if (video.mozRequestFullScreen) {
+                    video.mozRequestFullScreen();
+                  } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                  }
+        } else {
 		video.pause();
 		$('#overlay').removeClass('hideMe');
-		
-		// video.webkitExitFullScreen();
+                $("#"+value).removeClass("showVideo");
+		//video.webkitExitFullScreen();
 	}
 	
 	// make this button highlighted to indicate played
 	var button = value+"_icon";
-	$('#'+button).addClass("played");
+        $('#'+button).addClass("played");
 
 } // END playvid
 

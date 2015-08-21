@@ -1,6 +1,7 @@
 <?php
-
-
+$sFolderPath = $_SERVER['DOCUMENT_ROOT'];
+$sDestination = $sFolderPath.'/data/bootstrap.php';
+require_once $sDestination;
 // Start output buffering
 ob_start();
 // run code in x.php file
@@ -17,19 +18,19 @@ $defaultNavJPG="nav.jpg";
 $defaultNavPNG="nav.png";
 $folderNav="nav.jpg";
 $loopCount=0;
-$baseFolder="movies";
+$baseFolder="movies";//(EXTERNAL_TEXT == 1) ? EXTERNAL_FOLDER.'/content/movies' : 'content/movies';
 $folderName="movies";
 $navHTML="";
 $thumbsHTML="";
 $movieHTML="";
-$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
-$fullPathPrefix = $_SERVER['DOCUMENT_ROOT'];
+$scriptDir = ROOT_DIR;
+$fullPathPrefix = ROOT_DIR;
 
 if (isset($_GET["folder"])&& !empty($_GET["folder"])) {$folderName=$_GET["folder"];}
 // echo "FolderName: ".$folderName;
   $folderName = str_replace($scriptDir."/", '', $folderName);
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 <head>
 	<title><?php echo $folderName; ?></title>
@@ -57,7 +58,7 @@ if (isset($_GET["folder"])&& !empty($_GET["folder"])) {$folderName=$_GET["folder
 $rootFolder = preg_replace( '~(\w)$~' , '$1' . DIRECTORY_SEPARATOR , realpath( getcwd() ) );
 $navCount=0;
 
-$moviesDir = str_replace("payloads/OATSEA-tv-player", 'content', $rootFolder);
+$moviesDir = str_replace("payloads\OATSEA-tv-player", (EXTERNAL_TEXT == 1) ? EXTERNAL_FOLDER.'\content' : 'content', $rootFolder);
 
 $all="'All'";
 			echo '<img class="mybutton" id="All_nav" alt="All" src="icons.png" onTouchStart="location.reload();" onclick="location.reload();" />';	
@@ -159,10 +160,10 @@ foreach(new RecursiveIteratorIterator($dir,RecursiveIteratorIterator::SELF_FIRST
 					$imageURL=$defaultNav;
 				} // END thumbs image exists test
 				
-			$iconID=$title."_icon";		
+			$iconID=$title."_icon";
+                        //<img onClick="playvid('.$itemID.');" class="videoicon" id="'.$iconID.'" width="320" height="240" src="'.$imageURL.'" />
 		    echo '<div class="myfig'.$tags.'"><img onClick="playvid('.$itemID.');" class="videoicon" id="'.$iconID.'" width="320" height="240" src="'.$imageURL.'" /><p class="imgtitle">'.$displayTitle.'</p>';
-			
-		    echo '<video onClick="playvid('.$itemID.');" class="videoclip" id="'.$title.'" width="1" height="1" controls preload="none" onended="videoEnded('.$itemID.')">
+                    echo '<video onClick="playvid('.$itemID.');" class="videoclip" id="'.$title.'" width="1" height="1" controls preload="none" onended="videoEnded('.$itemID.')">
 			  <source src="'.$itemUrl.'" type="video/mp4"> 
 				  Your browser does not support the video tag.
 			  </video> </div>
